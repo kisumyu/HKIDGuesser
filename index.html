@@ -30,7 +30,7 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Luminous Full Moon */
+        /* Luminous Full Moon Graphic */
         .moon-sphere {
             background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #fde047 60%, #eab308 100%);
             box-shadow: 0 0 50px rgba(254, 240, 138, 0.8), 0 0 100px rgba(234, 179, 8, 0.4);
@@ -74,7 +74,7 @@
             animation-delay: var(--delay, 0s);
         }
 
-        /* Stars Twinkle */
+        /* Stars Twinkle Animation */
         .star-dot {
             position: absolute;
             background: white;
@@ -148,7 +148,7 @@
                 HKID Check Digit Lanterns
             </h1>
             <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-                Calculate your check digit using the standard <strong class="text-amber-300">Method</strong> formula (A=1...Z=26, Weights 8,7,6,5,4,3,2) or challenge your mental math in the Moon Festival game!
+                Discover your HKID check digit or challenge your mental math skills in the Moon Festival practice game!
             </p>
         </header>
 
@@ -156,7 +156,7 @@
         <div class="flex items-center gap-2 p-1.5 bg-slate-950/80 border border-amber-500/30 rounded-2xl w-full max-w-md">
             <button id="tab-calc" class="tab-btn active flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 border border-transparent">
                 <i class="fa-solid fa-calculator"></i>
-                <span>Calculator & Math</span>
+                <span>Calculator</span>
             </button>
             <button id="tab-game" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-amber-300 transition-all flex items-center justify-center gap-2 border border-transparent">
                 <i class="fa-solid fa-gamepad"></i>
@@ -164,7 +164,7 @@
             </button>
         </div>
 
-        <!-- ================= TAB 1: CALCULATOR & METHOD 2 MATH ================= -->
+        <!-- ================= TAB 1: CALCULATOR SECTION ================= -->
         <div id="section-calc" class="w-full glass-card rounded-3xl p-5 sm:p-8 space-y-6">
             
             <!-- HKID Input Row -->
@@ -172,7 +172,7 @@
                 <div class="relative w-full sm:flex-1">
                     <label for="hkid-input" class="block text-xs text-amber-300 font-bold mb-1 tracking-wider uppercase flex items-center justify-between">
                         <span>HKID Without Check Digit</span>
-                        <span class="text-slate-400 font-normal text-[11px]">e.g. B255241 or AB123456</span>
+                        <span class="text-slate-400 font-normal text-[11px]">e.g. B255241</span>
                     </label>
                     <div class="relative flex items-center">
                         <span class="absolute left-4 text-amber-400/80 text-lg font-bold">
@@ -181,7 +181,7 @@
                         <input 
                             type="text" 
                             id="hkid-input" 
-                            maxlength="8" 
+                            maxlength="7" 
                             placeholder="e.g. B255241" 
                             class="w-full bg-slate-950/90 text-amber-100 mono-font text-xl sm:text-2xl font-extrabold pl-12 pr-12 py-3.5 rounded-2xl border-2 border-amber-500/40 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 transition-all uppercase tracking-widest placeholder:text-slate-600 placeholder:tracking-normal placeholder:font-sans placeholder:text-base"
                         />
@@ -191,7 +191,7 @@
                     </div>
                     <div id="error-msg" class="text-rose-400 text-xs mt-1.5 font-medium flex items-center gap-1 opacity-0 transition-opacity">
                         <i class="fa-solid fa-circle-exclamation"></i>
-                        <span id="error-text">Please input 1 or 2 letters followed by 6 digits.</span>
+                        <span id="error-text">Please input 1 letter followed by 6 digits.</span>
                     </div>
                 </div>
 
@@ -208,15 +208,16 @@
                 </div>
             </div>
 
-            <!-- Central Mid-Autumn Festival Red Lantern Display -->
-            <div class="relative py-4 border-y border-amber-500/20 flex flex-col items-center justify-center">
-                <div id="main-lantern" class="relative w-44 h-56 sm:w-52 sm:h-64 bg-gradient-to-b from-red-600 via-amber-600 to-red-800 rounded-3xl flex flex-col items-center justify-between p-3.5 border-2 border-amber-300/80 shadow-2xl transition-all duration-700 lantern-lit">
+            <!-- Central Festive Red Lantern Display -->
+            <div class="relative py-16 sm:py-20 my-2 border-y border-amber-500/20 flex flex-col items-center justify-center overflow-visible">
+                <div id="main-lantern" class="relative w-44 h-56 sm:w-52 sm:h-64 bg-gradient-to-b from-red-600 via-amber-600 to-red-800 rounded-3xl flex flex-col items-center justify-between p-3.5 border-2 border-amber-300/80 shadow-2xl transition-all duration-700">
                     
-                    <!-- Hanging String & Top Golden Cap -->
-                    <div class="absolute -top-12 w-0.5 h-12 bg-amber-300"></div>
+                    <!-- Hanging Ring, String & Top Golden Cap -->
+                    <div class="absolute -top-16 w-3.5 h-3.5 rounded-full border-2 border-amber-300 shadow-sm"></div>
+                    <div class="absolute -top-12 w-0.5 h-12 bg-amber-300 shadow-sm"></div>
                     <div class="w-24 h-4 bg-amber-400 rounded-t-md shadow-md border-b border-amber-600"></div>
 
-                    <!-- Inner Glowing Parchment -->
+                    <!-- Inner Parchment -->
                     <div class="w-full flex-1 flex flex-col items-center justify-center border-y border-dashed border-amber-300/60 my-2 relative overflow-hidden rounded-2xl bg-gradient-to-b from-amber-500/20 to-red-950/70 p-2">
                         <span class="text-[11px] text-amber-200 font-serif tracking-widest uppercase flex items-center gap-1">
                             <i class="fa-solid fa-certificate text-amber-400 text-[10px]"></i>
@@ -247,16 +248,13 @@
                 </button>
             </div>
 
-            <!-- Step-by-Step Method 2 Calculation Breakdown (Hidden by default) -->
+            <!-- Step-by-Step Calculation Breakdown (Hidden by default) -->
             <div id="breakdown-wrapper" class="space-y-3 hidden transition-all duration-300">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
                         <i class="fa-solid fa-list-ol text-amber-400"></i>
                         <span>Step-by-Step Math Breakdown</span>
                     </h2>
-                    <span id="formula-badge" class="text-xs bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full mono-font w-fit">
-                        Method (A=1...Z=26)
-                    </span>
                 </div>
 
                 <!-- Breakdown Table -->
@@ -297,7 +295,7 @@
 
         </div>
 
-        <!-- ================= TAB 2: MID-AUTUMN PRACTICE GAME ================= -->
+        <!-- ================= TAB 2: PRACTICE GAME SECTION ================= -->
         <div id="section-game" class="w-full glass-card rounded-3xl p-5 sm:p-8 space-y-6 hidden">
             
             <!-- Game Header Stats -->
@@ -323,6 +321,27 @@
                 </div>
             </div>
 
+            <!-- Letter-to-Number Quick Reference Toggle & Panel -->
+            <div class="bg-slate-950/80 border border-amber-500/30 rounded-2xl p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-xs text-amber-300 font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-book-bookmark text-amber-400"></i>
+                        <span>Letter Values Reference (A=1 ... Z=26)</span>
+                    </div>
+                    <button id="toggle-ref-btn" type="button" class="px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+                        <i class="fa-solid fa-table-cells text-amber-400"></i>
+                        <span id="toggle-ref-text">Show Reference Sheet</span>
+                    </button>
+                </div>
+
+                <!-- A-Z Reference Grid -->
+                <div id="ref-grid-wrapper" class="hidden pt-2 border-t border-slate-800 transition-all">
+                    <div class="grid grid-cols-6 sm:grid-cols-9 md:grid-cols-13 gap-1.5 text-center text-xs mono-font">
+                        <!-- Dynamic Generation -->
+                    </div>
+                </div>
+            </div>
+
             <!-- Game Question Panel -->
             <div class="bg-slate-950/85 border border-amber-500/30 rounded-2xl p-6 text-center space-y-4 relative overflow-hidden">
                 <div class="inline-flex items-center gap-2 text-xs text-amber-400 uppercase tracking-widest font-bold bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
@@ -335,7 +354,7 @@
                 </div>
 
                 <p class="text-xs text-slate-400 max-w-md mx-auto">
-                    Calculate the weighted sum mod 11, then tap the matching digit below!
+                    Calculate the weighted sum modulo 11, then tap the matching digit below!
                 </p>
 
                 <!-- 0-9 and A Interactive Button Grid -->
@@ -363,82 +382,56 @@
 
     <!-- Footer -->
     <footer class="relative z-10 text-center text-xs text-slate-400 py-4 mt-6">
-        <p>Mid-Autumn HKID Check Digit Game • Method Modulo 11 Standard • 🥮 祝大家中秋團圓快樂！</p>
+        <p>Mid-Autumn HKID Check Digit Game • 🥮 祝大家中秋團圓快樂！</p>
     </footer>
 
     <script>
         const jsConfetti = new JSConfetti();
 
         /**
-         * METHOD 2 HKID MOD11 CALCULATION
+         * SINGLE-LETTER HKID MOD11 CALCULATION
          * - Letter conversion: A=1, B=2, ..., Z=26
-         * - Single-Letter Format: [Letter] + 6 Digits
-         *     Weights: 8, 7, 6, 5, 4, 3, 2
-         * - Double-Letter Format: [Letter 1] + [Letter 2] + 6 Digits
-         *     Weights: 9, 8, 7, 6, 5, 4, 3, 2
-         * - Sum S = sum(val_i * weight_i)
+         * - Format: [1 Letter] + [6 Digits] (e.g. B255241)
+         * - Positional Weights: 8, 7, 6, 5, 4, 3, 2
+         * - Sum S = (Letter_val * 8) + sum(Digit_i * Weight_i)
          * - Remainder R = S % 11
          * - Check Digit Value:
-         *     If R == 0: Check Digit is 0
-         *     If R == 1: Check Digit is A (11 - 1 = 10 -> 'A')
-         *     If R >= 2: Check Digit is (11 - R)
+         *     If R == 0: '0'
+         *     If R == 1: 'A'
+         *     If R >= 2: String(11 - R)
          */
-        function calculateHKIDMethod2(inputStr) {
+        function calculateSingleLetterHKID(inputStr) {
             const clean = inputStr.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
 
+            // Strictly match 1 uppercase letter and exactly 6 digits
             const matchSingle = clean.match(/^([A-Z])(\d{6})$/);
-            const matchDouble = clean.match(/^([A-Z]{2})(\d{6})$/);
 
-            if (!matchSingle && !matchDouble) {
+            if (!matchSingle) {
                 return { 
                     valid: false, 
-                    error: 'Please enter 1 letter followed by 6 digits (e.g. B255241 or AB123456).' 
+                    error: 'Please input exactly 1 letter followed by 6 digits (e.g. B255241).' 
                 };
             }
 
             let rows = [];
             let totalSum = 0;
-            const isDouble = !!matchDouble;
 
-            if (isDouble) {
-                // Two letter prefix: weights 9, 8, 7, 6, 5, 4, 3, 2
-                const letter1 = matchDouble[1][0];
-                const letter2 = matchDouble[1][1];
-                const digits = matchDouble[2];
+            const letter = matchSingle[1];
+            const digits = matchSingle[2];
 
-                const val1 = letter1.charCodeAt(0) - 64; // A=1, B=2...
-                const val2 = letter2.charCodeAt(0) - 64;
+            const letterVal = letter.charCodeAt(0) - 64; // A=1, B=2...
+            const letterProd = letterVal * 8;
+            totalSum += letterProd;
 
-                rows.push({ pos: 'Letter 1', char: letter1, val: val1, weight: 9, prod: val1 * 9 });
-                rows.push({ pos: 'Letter 2', char: letter2, val: val2, weight: 8, prod: val2 * 8 });
-                totalSum += (val1 * 9) + (val2 * 8);
+            rows.push({ pos: 'Prefix Letter', char: letter, val: letterVal, weight: 8, prod: letterProd });
 
-                const digitWeights = [7, 6, 5, 4, 3, 2];
-                for (let i = 0; i < 6; i++) {
-                    const dVal = parseInt(digits[i], 10);
-                    const w = digitWeights[i];
-                    const prod = dVal * w;
-                    totalSum += prod;
-                    rows.push({ pos: `Digit ${i + 1}`, char: digits[i], val: dVal, weight: w, prod });
-                }
-
-            } else {
-                // Single letter prefix: weights 8, 7, 6, 5, 4, 3, 2
-                const letter1 = matchSingle[1];
-                const digits = matchSingle[2];
-
-                const val1 = letter1.charCodeAt(0) - 64; // A=1, B=2...
-                rows.push({ pos: 'Letter 1', char: letter1, val: val1, weight: 8, prod: val1 * 8 });
-                totalSum += val1 * 8;
-
-                const digitWeights = [7, 6, 5, 4, 3, 2];
-                for (let i = 0; i < 6; i++) {
-                    const dVal = parseInt(digits[i], 10);
-                    const w = digitWeights[i];
-                    const prod = dVal * w;
-                    totalSum += prod;
-                    rows.push({ pos: `Digit ${i + 1}`, char: digits[i], val: dVal, weight: w, prod });
-                }
+            const digitWeights = [7, 6, 5, 4, 3, 2];
+            for (let i = 0; i < 6; i++) {
+                const dVal = parseInt(digits[i], 10);
+                const w = digitWeights[i];
+                const prod = dVal * w;
+                totalSum += prod;
+                rows.push({ pos: `Digit ${i + 1}`, char: digits[i], val: dVal, weight: w, prod });
             }
 
             const remainder = totalSum % 11;
@@ -450,7 +443,7 @@
                 formulaText = 'Remainder = 0 → Check Digit = 0';
             } else if (remainder === 1) {
                 checkDigit = 'A';
-                formulaText = 'Remainder = 1 → Check Digit = A (represents 10)';
+                formulaText = 'Remainder = 1 → Check Digit = A';
             } else {
                 const diff = 11 - remainder;
                 checkDigit = diff.toString();
@@ -461,7 +454,6 @@
                 valid: true,
                 cleanPrefix: clean,
                 fullHKID: `${clean}(${checkDigit})`,
-                isDouble,
                 rows,
                 totalSum,
                 remainder,
@@ -470,17 +462,9 @@
             };
         }
 
-        function generateRandomHKIDPrefix() {
+        function generateRandomSingleLetterPrefix() {
             const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-            const isDouble = Math.random() > 1;
-            let prefix = '';
-
-            if (isDouble) {
-                prefix = letters[Math.floor(Math.random() * letters.length)] + 
-                         letters[Math.floor(Math.random() * letters.length)];
-            } else {
-                prefix = letters[Math.floor(Math.random() * letters.length)];
-            }
+            const prefix = letters[Math.floor(Math.random() * letters.length)];
 
             let digits = '';
             for (let i = 0; i < 6; i++) {
@@ -513,11 +497,9 @@
         const breakdownWrapper = document.getElementById('breakdown-wrapper');
 
         const breakdownTbody = document.getElementById('breakdown-tbody');
-        const mathSummary = document.getElementById('math-summary');
         const sumVal = document.getElementById('sum-val');
         const remVal = document.getElementById('rem-val');
         const formulaVal = document.getElementById('formula-val');
-        const formulaBadge = document.getElementById('formula-badge');
 
         // Game elements
         const gameScoreEl = document.getElementById('game-score');
@@ -528,9 +510,41 @@
         const feedbackText = document.getElementById('feedback-text');
         const nextQuestionBtn = document.getElementById('next-question-btn');
 
+        // Reference Table Elements
+        const toggleRefBtn = document.getElementById('toggle-ref-btn');
+        const toggleRefText = document.getElementById('toggle-ref-text');
+        const refGridWrapper = document.getElementById('ref-grid-wrapper');
+
         let currentGameTarget = null;
         let score = 0;
         let streak = 0;
+
+        function initReferenceTable() {
+            const gridContainer = refGridWrapper.querySelector('.grid');
+            gridContainer.innerHTML = '';
+            
+            for (let i = 1; i <= 26; i++) {
+                const char = String.fromCharCode(64 + i);
+                const item = document.createElement('div');
+                item.className = 'bg-slate-900 border border-amber-500/20 rounded-lg p-1.5 flex flex-col items-center justify-center hover:border-amber-400/60 transition-colors';
+                item.innerHTML = `
+                    <span class="font-bold text-amber-300 text-sm">${char}</span>
+                    <span class="text-[10px] text-slate-400 font-sans">${i}</span>
+                `;
+                gridContainer.appendChild(item);
+            }
+        }
+
+        toggleRefBtn.addEventListener('click', () => {
+            const isHidden = refGridWrapper.classList.contains('hidden');
+            if (isHidden) {
+                refGridWrapper.classList.remove('hidden');
+                toggleRefText.textContent = 'Hide Reference Sheet';
+            } else {
+                refGridWrapper.classList.add('hidden');
+                toggleRefText.textContent = 'Show Reference Sheet';
+            }
+        });
 
         tabCalc.addEventListener('click', () => {
             tabCalc.classList.add('active');
@@ -562,9 +576,6 @@
 
             checkDigitDisplay.textContent = res.checkDigit;
             fullHkidBadge.textContent = res.fullHKID;
-            formulaBadge.textContent = res.isDouble 
-                ? 'Method 2: 2 Letters (Weights: 9,8,7,6,5,4,3,2)' 
-                : 'Method 2: 1 Letter (Weights: 8,7,6,5,4,3,2)';
 
             // Populate Breakdown Table
             breakdownTbody.innerHTML = '';
@@ -602,14 +613,14 @@
         }
 
         function startNewGameRound() {
-            const prefix = generateRandomHKIDPrefix();
-            currentGameTarget = calculateHKIDMethod2(prefix);
+            const prefix = generateRandomSingleLetterPrefix();
+            currentGameTarget = calculateSingleLetterHKID(prefix);
             gameHkidPrompt.textContent = `${prefix}( ? )`;
             
             gameFeedback.className = 'min-h-12 flex items-center justify-center font-bold text-sm transition-all opacity-0 rounded-xl px-4 py-2';
             feedbackText.textContent = '--';
 
-            // Re-enable buttons
+            // Re-enable option buttons
             Array.from(digitButtonsContainer.children).forEach(btn => {
                 btn.disabled = false;
                 btn.className = 'py-3 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-200 font-bold text-lg mono-font hover:bg-amber-500 hover:text-slate-950 transition-all active:scale-95 shadow-md flex items-center justify-center';
@@ -621,7 +632,7 @@
 
             const isCorrect = selectedDigit === currentGameTarget.checkDigit;
 
-            // Lock options after selection
+            // Lock option buttons after selecting an answer
             Array.from(digitButtonsContainer.children).forEach(btn => btn.disabled = true);
 
             if (isCorrect) {
@@ -634,7 +645,7 @@
                 feedbackText.innerHTML = `🎉 <strong>Splendid!</strong> Correct check digit for ${currentGameTarget.cleanPrefix} is <strong>(${currentGameTarget.checkDigit})</strong>. (+${earnedPoints} pts)`;
                 gameFeedback.className = 'min-h-12 flex items-center justify-center font-medium text-xs sm:text-sm text-emerald-300 bg-emerald-950/70 border border-emerald-500/40 rounded-xl px-4 py-2 opacity-100';
 
-                // Confetti fireworks
+                // Festive confetti animation
                 jsConfetti.addConfetti({
                     emojis: ['🥮', '🏮', '✨', '🌕', '🐇'],
                     emojiSize: 32,
@@ -645,7 +656,7 @@
                 streak = 0;
                 gameStreakEl.textContent = `0 🔥`;
 
-                feedbackText.innerHTML = `❌ <strong>Not quite!</strong> ${currentGameTarget.cleanPrefix} check digit is <strong>(${currentGameTarget.checkDigit})</strong>. [Sum: ${currentGameTarget.totalSum}, Rem: ${currentGameTarget.remainder}]`;
+                feedbackText.innerHTML = `❌ <strong>Not quite!</strong> Check digit for ${currentGameTarget.cleanPrefix} is <strong>(${currentGameTarget.checkDigit})</strong>. [Sum: ${currentGameTarget.totalSum}, Remainder: ${currentGameTarget.remainder}]`;
                 gameFeedback.className = 'min-h-12 flex items-center justify-center font-medium text-xs sm:text-sm text-rose-300 bg-rose-950/70 border border-rose-500/40 rounded-xl px-4 py-2 opacity-100';
             }
         }
@@ -701,7 +712,7 @@
             const val = e.target.value.toUpperCase();
             hkidInput.value = val;
             clearBtn.classList.toggle('hidden', val.length === 0);
-            // Keep check digit hidden while typing until the button is clicked
+            // Keep check digit hidden while typing
             resetLanternDisplay(val ? `${val}( ? )` : '--');
         });
 
@@ -724,15 +735,14 @@
                 errorMsg.classList.remove('opacity-0');
                 return;
             }
-            const res = calculateHKIDMethod2(rawVal);
+            const res = calculateSingleLetterHKID(rawVal);
             renderCalculatorUI(res);
         });
 
         randomBtn.addEventListener('click', () => {
-            const rand = generateRandomHKIDPrefix();
+            const rand = generateRandomSingleLetterPrefix();
             hkidInput.value = rand;
             clearBtn.classList.remove('hidden');
-            // Populate prefix but do not reveal check digit until Light Lantern is pressed
             resetLanternDisplay(`${rand}( ? )`);
         });
 
@@ -740,7 +750,6 @@
             const isCurrentlyHidden = breakdownWrapper.classList.contains('hidden');
 
             if (isCurrentlyHidden) {
-                // If lantern is not lit yet, calculate it first
                 if (checkDigitDisplay.textContent === '?') {
                     calculateBtn.click();
                 }
@@ -756,12 +765,13 @@
 
         nextQuestionBtn.addEventListener('click', startNewGameRound);
 
-        // Window load initialization
+        // Window initialization
         window.onload = function() {
             initBackgroundDecorations();
             initGameButtons();
+            initReferenceTable();
 
-            // Initial example loaded in standby mode without revealing check digit
+            // Default initial state
             hkidInput.value = 'B255241';
             clearBtn.classList.remove('hidden');
             resetLanternDisplay('B255241( ? )');
