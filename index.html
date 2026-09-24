@@ -1,751 +1,771 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Arcane HKID Oracle | Modulo 11 Divination</title>
-  
-  <!-- Fonts & Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            cinzel: ['Cinzel', 'serif'],
-            sans: ['Inter', 'sans-serif'],
-            mono: ['Space Grotesk', 'monospace'],
-          },
-          colors: {
-            arcane: {
-              950: '#070210',
-              900: '#110626',
-              850: '#1b093b',
-              800: '#2a0e5c',
-              700: '#44148c',
-              purple: {
-                deep: '#1e053a',
-                mid: '#7928ca',
-                glow: '#b845ff',
-                neon: '#d946ef',
-                light: '#e9d5ff'
-              },
-              gold: '#fcd34d',
-              cyan: '#38bdf8'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mid-Autumn HKID Check Digit Game</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- JS Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Serif+TC:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 80% 15%, #241142 0%, #120924 45%, #06020c 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .serif-title {
+            font-family: 'Noto Serif TC', 'Cinzel', serif;
+        }
+
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Luminous Full Moon */
+        .moon-sphere {
+            background: radial-gradient(circle at 35% 35%, #fffdf0 0%, #fde047 60%, #eab308 100%);
+            box-shadow: 0 0 50px rgba(254, 240, 138, 0.8), 0 0 100px rgba(234, 179, 8, 0.4);
+        }
+
+        /* Pulsing Glow for Lantern */
+        @keyframes lanternPulse {
+            0%, 100% {
+                box-shadow: 0 0 25px rgba(245, 158, 11, 0.6), 0 0 50px rgba(239, 68, 68, 0.4);
+                transform: scale(1);
             }
-          },
-          boxShadow: {
-            'orb-ambient': '0 0 80px 20px rgba(168, 85, 247, 0.4), inset 0 0 60px 10px rgba(147, 51, 234, 0.5)',
-            'orb-active': '0 0 120px 35px rgba(217, 70, 239, 0.65), inset 0 0 80px 20px rgba(192, 132, 252, 0.8)',
-            'purple-card': '0 0 50px -5px rgba(147, 51, 234, 0.35)'
-          }
+            50% {
+                box-shadow: 0 0 45px rgba(253, 224, 71, 0.9), 0 0 80px rgba(245, 158, 11, 0.7);
+                transform: scale(1.02);
+            }
         }
-      }
-    }
-  </script>
 
-  <style>
-    /* Orbital rotations */
-    @keyframes orbSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes orbSpinReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
-    }
-    @keyframes orbFloat {
-      0%, 100% { transform: translateY(0px) scale(1); }
-      50% { transform: translateY(-8px) scale(1.02); }
-    }
-    @keyframes plasmaSwirl {
-      0% { transform: rotate(0deg) scale(1); filter: hue-rotate(0deg); }
-      50% { transform: rotate(180deg) scale(1.15); filter: hue-rotate(30deg); }
-      100% { transform: rotate(360deg) scale(1); filter: hue-rotate(0deg); }
-    }
-    @keyframes runicGlowPulse {
-      0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 6px rgba(192, 132, 252, 0.6)); }
-      50% { opacity: 0.95; filter: drop-shadow(0 0 18px rgba(217, 70, 239, 0.95)); }
-    }
+        .lantern-lit {
+            animation: lanternPulse 2.4s infinite ease-in-out;
+            filter: brightness(1.15);
+        }
 
-    .animate-spin-slow {
-      animation: orbSpin 28s linear infinite;
-    }
-    .animate-spin-reverse {
-      animation: orbSpinReverse 20s linear infinite;
-    }
-    @keyframes eldritchPulse {
-      0%, 100% { filter: drop-shadow(0 0 8px rgba(217, 70, 239, 0.7)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.4)); opacity: 0.85; }
-      50% { filter: drop-shadow(0 0 16px rgba(236, 72, 153, 0.95)) drop-shadow(0 0 35px rgba(217, 70, 239, 0.8)); opacity: 1; }
-    }
-    @keyframes eldritchFastSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes eldritchCounterSpin {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
-    }
+        /* Floating Mid-Autumn sky lanterns */
+        @keyframes floatSky {
+            0% {
+                transform: translateY(110vh) translateX(0) scale(0.65);
+                opacity: 0;
+            }
+            15% { opacity: 0.85; }
+            85% { opacity: 0.85; }
+            100% {
+                transform: translateY(-20vh) translateX(40px) scale(1.05);
+                opacity: 0;
+            }
+        }
 
-    .eldritch-mandala {
-      animation: eldritchPulse 2.5s ease-in-out infinite;
-    }
-    .eldritch-ring-outer {
-      animation: eldritchFastSpin 35s linear infinite;
-    }
-    .eldritch-ring-mid {
-      animation: eldritchCounterSpin 18s linear infinite;
-    }
-    .eldritch-ring-inner {
-      animation: eldritchFastSpin 8s linear infinite;
-    }
+        .sky-lantern {
+            position: absolute;
+            pointer-events: none;
+            animation: floatSky var(--duration, 14s) linear infinite;
+            animation-delay: var(--delay, 0s);
+        }
 
-    .casting-surge .eldritch-ring-outer {
-      animation: eldritchFastSpin 3s linear infinite;
-    }
-    .casting-surge .eldritch-ring-mid {
-      animation: eldritchCounterSpin 1.8s linear infinite;
-    }
-    .casting-surge .eldritch-ring-inner {
-      animation: eldritchFastSpin 0.9s linear infinite;
-    }
+        /* Stars Twinkle */
+        .star-dot {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkleAnim var(--duration, 3s) infinite ease-in-out;
+        }
 
-    .animate-orb-float {
-      animation: orbFloat 4.5s ease-in-out infinite;
-    }
-    .animate-plasma {
-      animation: plasmaSwirl 10s ease-in-out infinite;
-    }
-    .animate-rune-pulse {
-      animation: runicGlowPulse 3s ease-in-out infinite;
-    }
+        @keyframes twinkleAnim {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
 
-    /* Crystal Orb Glass Refraction & Depth */
-    .scrying-orb-sphere {
-      background: radial-gradient(circle at 35% 30%, rgba(245, 208, 254, 0.45) 0%, rgba(168, 85, 247, 0.25) 25%, rgba(107, 33, 168, 0.75) 60%, rgba(30, 5, 58, 0.95) 90%);
-      border: 1.5px solid rgba(233, 213, 255, 0.35);
-      box-shadow: inset -10px -15px 40px rgba(15, 2, 33, 0.9),
-                  inset 10px 10px 30px rgba(233, 213, 255, 0.3),
-                  0 0 50px rgba(168, 85, 247, 0.45);
-    }
-    .scrying-orb-specular {
-      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 70%);
-    }
+        /* Glassmorphism panel */
+        .glass-card {
+            background: rgba(23, 15, 38, 0.78);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(251, 191, 36, 0.28);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+        }
 
-    .grimoire-glass-purple {
-      background: linear-gradient(145deg, rgba(27, 9, 59, 0.85) 0%, rgba(15, 4, 34, 0.95) 100%);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(192, 132, 252, 0.3);
-    }
-    
-    .text-glow-purple {
-      text-shadow: 0 0 20px rgba(217, 70, 239, 0.9), 0 0 45px rgba(168, 85, 247, 0.6);
-    }
-  </style>
+        .gold-gradient {
+            background: linear-gradient(135deg, #fffbeb 0%, #fde047 50%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #ffffff;
+            border-color: #fef08a;
+            box-shadow: 0 4px 18px rgba(217, 119, 6, 0.45);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d97706;
+            border-radius: 3px;
+        }
+    </style>
 </head>
+<body class="relative min-h-screen flex flex-col justify-between items-center p-3 sm:p-6 select-none">
 
-<body class="bg-arcane-950 text-purple-100 font-sans min-h-screen relative flex flex-col justify-between overflow-x-hidden selection:bg-purple-600 selection:text-white">
-  
-  <!-- Interactive Cosmic & Purple Mana Canvas -->
-  <canvas id="cosmic-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+    <!-- Ambient Sky Backdrop -->
+    <div id="stars-layer" class="fixed inset-0 pointer-events-none z-0"></div>
+    <div id="sky-lanterns-layer" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
 
-  <!-- Ambient Purple Nebula Blooms -->
-  <div class="fixed top-1/4 -left-20 w-96 h-96 bg-purple-900/25 rounded-full blur-3xl pointer-events-none -z-10"></div>
-  <div class="fixed bottom-1/4 -right-20 w-96 h-96 bg-fuchsia-900/20 rounded-full blur-3xl pointer-events-none -z-10"></div>
-
-  <!-- Header -->
-  <header class="relative z-10 w-full px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center space-x-2.5">
-      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-fuchsia-400 p-[1.5px] shadow-[0_0_15px_rgba(192,132,252,0.5)]">
-        <div class="w-full h-full bg-arcane-950 rounded-full flex items-center justify-center">
-          <span class="font-cinzel text-purple-300 text-sm font-bold">🔮</span>
-        </div>
-      </div>
-      <span class="font-cinzel text-sm sm:text-base font-bold tracking-widest text-purple-200">
-        THE PURPLE ORACLE
-      </span>
+    <!-- Glowing Full Moon Graphic -->
+    <div class="fixed top-[-40px] right-[-40px] sm:top-[-60px] sm:right-[-60px] w-48 h-48 sm:w-72 sm:h-72 rounded-full moon-sphere z-0 opacity-85 pointer-events-none transition-all">
+        <div class="w-16 h-16 bg-amber-200/40 rounded-full absolute top-12 left-16 blur-sm"></div>
+        <div class="w-24 h-24 bg-amber-400/25 rounded-full absolute bottom-12 right-12 blur-md"></div>
     </div>
 
-    <!-- Sound Chime Toggle -->
-    <button id="sound-toggle-btn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-purple-950/80 border border-purple-600/50 hover:border-fuchsia-400/80 text-xs text-purple-300 hover:text-white transition-all shadow-[0_0_12px_rgba(168,85,247,0.2)]">
-      <span id="sound-icon">🔔</span>
-      <span id="sound-label" class="hidden sm:inline text-[11px] font-mono">Sound: Off</span>
-    </button>
-  </header>
-
-  <!-- Main Pure Diviner Altar -->
-  <main class="relative z-10 w-full max-w-lg mx-auto px-4 py-4 sm:py-8 flex flex-col items-center">
-    
-    <!-- Title -->
-    <div class="text-center mb-6">
-      <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-900/60 border border-purple-500/40 text-[11px] font-mono tracking-widest text-purple-300 mb-2 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
-        <span>✦</span> MODULO 11 SCRYING ORB <span>✦</span>
-      </div>
-      <h1 class="font-cinzel text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-b from-purple-100 via-purple-300 to-fuchsia-400 tracking-wider">
-        Check Digit Prophecy
-      </h1>
-    </div>
-
-    <!-- The Ethereal Scrying Orb Assembly with Doctor Strange Eldritch Mandalas -->
-    <div id="mandala-container" class="relative flex items-center justify-center my-6 group">
-      
-      <!-- Doctor Strange Inspired Eldritch Tao Mandala (Concentric Sacred Geometry) -->
-      <div class="absolute w-[310px] h-[310px] sm:w-[350px] sm:h-[350px] pointer-events-none select-none eldritch-mandala flex items-center justify-center -z-0">
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center gap-6 my-auto">
         
-        <!-- Outer Glyphic Concentric Ring -->
-        <svg class="absolute inset-0 w-full h-full eldritch-ring-outer" viewBox="0 0 400 400" fill="none">
-          <circle cx="200" cy="200" r="192" stroke="#d946ef" stroke-width="1.8" stroke-dasharray="8 6" opacity="0.6"/>
-          <circle cx="200" cy="200" r="184" stroke="#c084fc" stroke-width="1.2" opacity="0.8"/>
-          <!-- Runic notches -->
-          <circle cx="200" cy="200" r="176" stroke="#f472b6" stroke-width="2.5" stroke-dasharray="2 18" opacity="0.9"/>
-          <!-- 12-Sector Mystic Tick Marks -->
-          <g stroke="#e879f9" stroke-width="1.5" opacity="0.7">
-            <line x1="200" y1="8" x2="200" y2="24"/>
-            <line x1="200" y1="376" x2="200" y2="392"/>
-            <line x1="8" y1="200" x2="24" y2="200"/>
-            <line x1="376" y1="200" x2="392" y2="200"/>
-            <line x1="64" y1="64" x2="76" y2="76"/>
-            <line x1="324" y1="324" x2="336" y2="336"/>
-            <line x1="336" y1="64" x2="324" y2="76"/>
-            <line x1="64" y1="336" x2="76" y2="324"/>
-          </g>
-        </svg>
+        <!-- Header Banner -->
+        <header class="text-center space-y-2 mt-2 sm:mt-0">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs sm:text-sm font-semibold tracking-wider">
+                <i class="fa-solid fa-moon text-amber-400"></i>
+                <span>中秋慶典 • MID-AUTUMN HKID CHECK DIGIT</span>
+                <i class="fa-solid fa-cookie-bite text-amber-400"></i>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black serif-title gold-gradient drop-shadow-lg tracking-wide">
+                HKID Check Digit Lanterns
+            </h1>
+            <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
+                Calculate your check digit using the standard <strong class="text-amber-300">Method</strong> formula (A=1...Z=26, Weights 8,7,6,5,4,3,2) or challenge your mental math in the Moon Festival game!
+            </p>
+        </header>
 
-        <!-- Mid Layer: Overlapping Dual Squares (Doctor Strange Tao Octagram) -->
-        <svg class="absolute inset-4 w-[calc(100%-32px)] h-[calc(100%-32px)] eldritch-ring-mid" viewBox="0 0 300 300" fill="none">
-          <circle cx="150" cy="150" r="140" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="14 8" opacity="0.85"/>
-          <!-- First square -->
-          <rect x="52" y="52" width="196" height="196" stroke="#f0abfc" stroke-width="1.5" opacity="0.7" fill="none"/>
-          <!-- Second square rotated 45 deg -->
-          <rect x="52" y="52" width="196" height="196" stroke="#e879f9" stroke-width="1.5" transform="rotate(45 150 150)" opacity="0.7" fill="none"/>
-          <!-- Third square rotated 22.5 deg -->
-          <rect x="68" y="68" width="164" height="164" stroke="#d946ef" stroke-width="1.2" stroke-dasharray="6 4" transform="rotate(22.5 150 150)" opacity="0.5" fill="none"/>
-        </svg>
-
-        <!-- Inner Layer: High-speed Sacred Geometric Core -->
-        <svg class="absolute inset-10 w-[calc(100%-80px)] h-[calc(100%-80px)] eldritch-ring-inner" viewBox="0 0 200 200" fill="none">
-          <circle cx="100" cy="100" r="95" stroke="#f472b6" stroke-width="1.8" stroke-dasharray="32 10" opacity="0.9"/>
-          <circle cx="100" cy="100" r="88" stroke="#c084fc" stroke-width="1" opacity="0.7"/>
-          <!-- Triangular Triskele Lines -->
-          <polygon points="100,12 176,144 24,144" stroke="#d946ef" stroke-width="1.2" opacity="0.5"/>
-          <polygon points="100,188 24,56 176,56" stroke="#e879f9" stroke-width="1.2" opacity="0.5"/>
-        </svg>
-
-      </div>
-
-      <!-- Glowing Pedestal Shadow -->
-      <div class="absolute -bottom-6 w-36 h-8 bg-purple-900/50 rounded-[50%] blur-md pointer-events-none"></div>
-
-      <!-- The Core Scrying Orb (No extra text, pure answer display only) -->
-      <div id="scrying-orb" class="relative w-44 h-44 sm:w-48 sm:h-48 rounded-full scrying-orb-sphere flex items-center justify-center cursor-pointer select-none transition-all duration-700 animate-orb-float shadow-orb-ambient overflow-hidden z-10">
-        
-        <!-- Internal Swirling Purple Plasma Nebula -->
-        <div class="absolute inset-0 bg-gradient-to-tr from-purple-950 via-fuchsia-900/70 to-purple-600/50 rounded-full animate-plasma opacity-80 pointer-events-none"></div>
-
-        <!-- Refraction Specular Highlight -->
-        <div class="absolute top-3 left-6 w-14 h-8 rounded-full scrying-orb-specular rotate-[-30deg] opacity-70 pointer-events-none"></div>
-        <div class="absolute bottom-4 right-6 w-8 h-4 rounded-full scrying-orb-specular rotate-[20deg] opacity-30 pointer-events-none"></div>
-
-        <!-- Center Display: ONLY the answer check digit, NO other text -->
-        <div id="orb-core-display" class="relative z-10 flex items-center justify-center">
-          <span id="orb-digit" class="font-cinzel text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-purple-100 to-fuchsia-300 drop-shadow-[0_0_25px_rgba(217,70,239,0.95)] transition-all transform duration-300"></span>
+        <!-- Navigation Tabs -->
+        <div class="flex items-center gap-2 p-1.5 bg-slate-950/80 border border-amber-500/30 rounded-2xl w-full max-w-md">
+            <button id="tab-calc" class="tab-btn active flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 border border-transparent">
+                <i class="fa-solid fa-calculator"></i>
+                <span>Calculator & Math</span>
+            </button>
+            <button id="tab-game" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-slate-400 hover:text-amber-300 transition-all flex items-center justify-center gap-2 border border-transparent">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Lantern Challenge</span>
+            </button>
         </div>
 
-      </div>
-    </div>
+        <!-- ================= TAB 1: CALCULATOR & METHOD 2 MATH ================= -->
+        <div id="section-calc" class="w-full glass-card rounded-3xl p-5 sm:p-8 space-y-6">
+            
+            <!-- HKID Input Row -->
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <div class="relative w-full sm:flex-1">
+                    <label for="hkid-input" class="block text-xs text-amber-300 font-bold mb-1 tracking-wider uppercase flex items-center justify-between">
+                        <span>HKID Without Check Digit</span>
+                        <span class="text-slate-400 font-normal text-[11px]">e.g. B255241 or AB123456</span>
+                    </label>
+                    <div class="relative flex items-center">
+                        <span class="absolute left-4 text-amber-400/80 text-lg font-bold">
+                            <i class="fa-solid fa-id-card"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="hkid-input" 
+                            maxlength="8" 
+                            placeholder="e.g. B255241" 
+                            class="w-full bg-slate-950/90 text-amber-100 mono-font text-xl sm:text-2xl font-extrabold pl-12 pr-12 py-3.5 rounded-2xl border-2 border-amber-500/40 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 transition-all uppercase tracking-widest placeholder:text-slate-600 placeholder:tracking-normal placeholder:font-sans placeholder:text-base"
+                        />
+                        <button id="clear-btn" class="absolute right-3 text-slate-500 hover:text-amber-400 p-2 transition-colors hidden" title="Clear">
+                            <i class="fa-solid fa-circle-xmark text-lg"></i>
+                        </button>
+                    </div>
+                    <div id="error-msg" class="text-rose-400 text-xs mt-1.5 font-medium flex items-center gap-1 opacity-0 transition-opacity">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span id="error-text">Please input 1 or 2 letters followed by 6 digits.</span>
+                    </div>
+                </div>
 
-    <!-- Divination Card for Pure Input & Button -->
-    <div id="altar-card" class="w-full mt-4 grimoire-glass-purple rounded-3xl p-6 sm:p-7 shadow-purple-card border border-purple-500/40 relative transition-all duration-500">
-      
-      <!-- Mystic Input Box -->
-      <div class="relative mb-3">
-        <input
-          id="hkid-input"
-          type="text"
-          maxlength="8"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="e.g. E364912"
-          class="w-full bg-arcane-950/90 border-2 border-purple-600/70 focus:border-fuchsia-400 focus:ring-4 focus:ring-purple-500/30 text-2xl sm:text-3xl font-mono tracking-widest uppercase text-purple-100 placeholder:text-purple-700/60 px-5 py-3.5 rounded-2xl outline-none text-center transition-all shadow-inner"
-        />
-      </div>
+                <!-- Control Buttons -->
+                <div class="flex sm:flex-col gap-2 w-full sm:w-auto pt-1 sm:pt-4">
+                    <button id="calculate-btn" class="flex-1 sm:flex-none px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-fire text-slate-950"></i>
+                        <span>Light Lantern</span>
+                    </button>
+                    <button id="random-btn" class="px-4 py-3.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-amber-300 border border-amber-500/30 font-semibold text-xs sm:text-sm active:scale-95 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-dice text-amber-400"></i>
+                        <span>Random ID</span>
+                    </button>
+                </div>
+            </div>
 
-      <!-- Purple Socket Indicators -->
-      <div id="socket-container" class="flex justify-center items-center gap-2 mb-5">
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all"></span>
-        <span class="socket-rune w-2.5 h-2.5 rounded-full bg-purple-950 border border-purple-800 transition-all hidden"></span>
-      </div>
+            <!-- Central Mid-Autumn Festival Red Lantern Display -->
+            <div class="relative py-4 border-y border-amber-500/20 flex flex-col items-center justify-center">
+                <div id="main-lantern" class="relative w-44 h-56 sm:w-52 sm:h-64 bg-gradient-to-b from-red-600 via-amber-600 to-red-800 rounded-3xl flex flex-col items-center justify-between p-3.5 border-2 border-amber-300/80 shadow-2xl transition-all duration-700 lantern-lit">
+                    
+                    <!-- Hanging String & Top Golden Cap -->
+                    <div class="absolute -top-12 w-0.5 h-12 bg-amber-300"></div>
+                    <div class="w-24 h-4 bg-amber-400 rounded-t-md shadow-md border-b border-amber-600"></div>
 
-      <!-- Action Button -->
-      <button
-        id="divinate-btn"
-        class="w-full relative group overflow-hidden rounded-2xl p-[2px] focus:outline-none transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-[0_0_25px_rgba(168,85,247,0.35)]"
-      >
-        <span class="absolute inset-0 bg-gradient-to-r from-purple-600 via-fuchsia-500 to-indigo-500 rounded-2xl opacity-90 group-hover:opacity-100 transition-opacity"></span>
-        <span class="relative flex items-center justify-center space-x-2 w-full px-6 py-4 rounded-[14px] bg-arcane-950 group-hover:bg-opacity-80 transition-all font-cinzel text-base sm:text-lg font-bold tracking-widest text-purple-100">
-          <span id="btn-text">DIVINE CHECK DIGIT 🔮</span>
-        </span>
-      </button>
+                    <!-- Inner Glowing Parchment -->
+                    <div class="w-full flex-1 flex flex-col items-center justify-center border-y border-dashed border-amber-300/60 my-2 relative overflow-hidden rounded-2xl bg-gradient-to-b from-amber-500/20 to-red-950/70 p-2">
+                        <span class="text-[11px] text-amber-200 font-serif tracking-widest uppercase flex items-center gap-1">
+                            <i class="fa-solid fa-certificate text-amber-400 text-[10px]"></i>
+                            <span>CHECK DIGIT</span>
+                        </span>
+                        <div id="check-digit-display" class="text-6xl sm:text-7xl font-black text-amber-100 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] mono-font my-1 transition-transform duration-300">
+                            ?
+                        </div>
+                        <span id="full-hkid-badge" class="text-xs mono-font font-bold text-amber-300 bg-amber-950/90 px-3 py-1 rounded-full border border-amber-500/40">
+                            --
+                        </span>
+                    </div>
 
-      <!-- Status / Notification -->
-      <div id="status-toast" class="hidden mt-4 p-3 rounded-xl border border-fuchsia-500/50 bg-fuchsia-950/70 text-fuchsia-200 text-xs font-mono text-center transition-all animate-pulse"></div>
+                    <!-- Bottom Golden Cap & Red Festive Tassel -->
+                    <div class="w-24 h-4 bg-amber-400 rounded-b-md shadow-md border-t border-amber-600"></div>
+                    <div class="absolute -bottom-12 w-3 h-12 bg-red-600 rounded-b-full flex items-center justify-center shadow-lg">
+                        <div class="w-6 h-6 bg-amber-400 rounded-full -bottom-1 absolute border border-amber-600"></div>
+                    </div>
+                </div>
+            </div>
 
-      <!-- Formatted HKID Direct Copy Section -->
-      <div id="copy-section" class="hidden mt-5 pt-4 border-t border-purple-800/50 flex flex-col items-center justify-center">
-        <button id="copy-hkid-btn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-purple-900/70 hover:bg-purple-800 border border-purple-500/60 hover:border-fuchsia-400 text-sm font-mono text-purple-200 hover:text-white transition-all shadow-[0_0_20px_rgba(168,85,247,0.25)] group" title="Click to copy full HKID">
-          <span id="full-hkid-text">E364912(5)</span>
-          <svg class="w-4 h-4 text-purple-400 group-hover:text-fuchsia-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-          </svg>
-        </button>
-        <span id="copied-pill" class="text-[11px] font-mono text-fuchsia-300 mt-2 opacity-0 transition-opacity duration-300">
-          ✦ Copied into parchment memory!
-        </span>
-      </div>
+            <!-- Reveal the Magic Action Button -->
+            <div class="flex justify-center pt-2">
+                <button id="toggle-breakdown-btn" type="button" class="px-5 py-2.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-200 text-xs sm:text-sm font-bold transition-all flex items-center gap-2 active:scale-95 shadow-md">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span id="toggle-breakdown-text">Reveal the Magic</span>
+                    <i id="toggle-breakdown-icon" class="fa-solid fa-chevron-down text-xs text-amber-300 transition-transform duration-300"></i>
+                </button>
+            </div>
 
-    </div>
-  </main>
+            <!-- Step-by-Step Method 2 Calculation Breakdown (Hidden by default) -->
+            <div id="breakdown-wrapper" class="space-y-3 hidden transition-all duration-300">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-amber-400"></i>
+                        <span>Step-by-Step Math Breakdown</span>
+                    </h2>
+                    <span id="formula-badge" class="text-xs bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2.5 py-0.5 rounded-full mono-font w-fit">
+                        Method (A=1...Z=26)
+                    </span>
+                </div>
 
-  <footer class="relative z-10 py-4 text-center text-[11px] font-mono text-purple-400/50">
-    Modulo 11 Algorithm ✦ Hong Kong Identity Standard
-  </footer>
+                <!-- Breakdown Table -->
+                <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/80 p-3">
+                    <table class="w-full text-center text-xs sm:text-sm mono-font">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-800/80">
+                                <th class="pb-2 px-2 text-left font-sans">Index</th>
+                                <th class="pb-2 px-2">Character</th>
+                                <th class="pb-2 px-2">Value</th>
+                                <th class="pb-2 px-2">×</th>
+                                <th class="pb-2 px-2 text-amber-400">Weight</th>
+                                <th class="pb-2 px-2 text-right text-emerald-400">= Product</th>
+                            </tr>
+                        </thead>
+                        <tbody id="breakdown-tbody" class="divide-y divide-slate-800/40 text-slate-200">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
 
-  <script>
-    /* Procedural Purple Celestial Chimes & Harmonics */
-    class MinimalAudio {
-      constructor() {
-        this.ctx = null;
-        this.enabled = false;
-      }
-      toggle() {
-        if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioContext();
+                <!-- Math Summary Details -->
+                <div id="math-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-center">
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider">Total Weighted Sum (S)</div>
+                        <div id="sum-val" class="text-lg font-bold text-amber-300 mono-font">0</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-center">
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider">Remainder (R = S % 11)</div>
+                        <div id="rem-val" class="text-lg font-bold text-amber-300 mono-font">0</div>
+                    </div>
+                    <div class="bg-slate-900/90 border border-amber-500/40 bg-amber-500/10 rounded-xl p-3 text-center">
+                        <div class="text-[11px] text-amber-300 uppercase tracking-wider">Check Digit Rule</div>
+                        <div id="formula-val" class="text-xs font-bold text-amber-200 mono-font mt-1">--</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= TAB 2: MID-AUTUMN PRACTICE GAME ================= -->
+        <div id="section-game" class="w-full glass-card rounded-3xl p-5 sm:p-8 space-y-6 hidden">
+            
+            <!-- Game Header Stats -->
+            <div class="flex items-center justify-between border-b border-amber-500/20 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider">Mooncake Points</div>
+                        <div id="game-score" class="text-2xl font-black text-amber-300 mono-font">0</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <div class="text-[11px] text-slate-400 uppercase tracking-wider">Lantern Streak</div>
+                        <div id="game-streak" class="text-2xl font-black text-emerald-400 mono-font">0 🔥</div>
+                    </div>
+                    <div class="w-11 h-11 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-xl">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Question Panel -->
+            <div class="bg-slate-950/85 border border-amber-500/30 rounded-2xl p-6 text-center space-y-4 relative overflow-hidden">
+                <div class="inline-flex items-center gap-2 text-xs text-amber-400 uppercase tracking-widest font-bold bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <span>Find the Check Digit</span>
+                </div>
+                
+                <div id="game-hkid-prompt" class="text-4xl sm:text-5xl font-black mono-font tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-yellow-500 py-1">
+                    ------
+                </div>
+
+                <p class="text-xs text-slate-400 max-w-md mx-auto">
+                    Calculate the weighted sum mod 11, then tap the matching digit below!
+                </p>
+
+                <!-- 0-9 and A Interactive Button Grid -->
+                <div id="digit-buttons-container" class="grid grid-cols-4 sm:grid-cols-6 gap-2.5 max-w-lg mx-auto pt-2">
+                    <!-- Dynamic Buttons -->
+                </div>
+
+                <!-- Instant Result Feedback Banner -->
+                <div id="game-feedback" class="min-h-12 flex items-center justify-center font-bold text-sm transition-all opacity-0 rounded-xl px-4 py-2">
+                    <span id="feedback-text">--</span>
+                </div>
+            </div>
+
+            <!-- Next Round Action -->
+            <div class="flex justify-center">
+                <button id="next-question-btn" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 active:scale-95 transition-all flex items-center gap-2">
+                    <span>Next Lantern Challenge</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center text-xs text-slate-400 py-4 mt-6">
+        <p>Mid-Autumn HKID Check Digit Game • Method Modulo 11 Standard • 🥮 祝大家中秋團圓快樂！</p>
+    </footer>
+
+    <script>
+        const jsConfetti = new JSConfetti();
+
+        /**
+         * METHOD 2 HKID MOD11 CALCULATION
+         * - Letter conversion: A=1, B=2, ..., Z=26
+         * - Single-Letter Format: [Letter] + 6 Digits
+         *     Weights: 8, 7, 6, 5, 4, 3, 2
+         * - Double-Letter Format: [Letter 1] + [Letter 2] + 6 Digits
+         *     Weights: 9, 8, 7, 6, 5, 4, 3, 2
+         * - Sum S = sum(val_i * weight_i)
+         * - Remainder R = S % 11
+         * - Check Digit Value:
+         *     If R == 0: Check Digit is 0
+         *     If R == 1: Check Digit is A (11 - 1 = 10 -> 'A')
+         *     If R >= 2: Check Digit is (11 - R)
+         */
+        function calculateHKIDMethod2(inputStr) {
+            const clean = inputStr.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+            const matchSingle = clean.match(/^([A-Z])(\d{6})$/);
+            const matchDouble = clean.match(/^([A-Z]{2})(\d{6})$/);
+
+            if (!matchSingle && !matchDouble) {
+                return { 
+                    valid: false, 
+                    error: 'Please enter 1 or 2 letters followed by 6 digits (e.g. B255241 or AB123456).' 
+                };
+            }
+
+            let rows = [];
+            let totalSum = 0;
+            const isDouble = !!matchDouble;
+
+            if (isDouble) {
+                // Two letter prefix: weights 9, 8, 7, 6, 5, 4, 3, 2
+                const letter1 = matchDouble[1][0];
+                const letter2 = matchDouble[1][1];
+                const digits = matchDouble[2];
+
+                const val1 = letter1.charCodeAt(0) - 64; // A=1, B=2...
+                const val2 = letter2.charCodeAt(0) - 64;
+
+                rows.push({ pos: 'Letter 1', char: letter1, val: val1, weight: 9, prod: val1 * 9 });
+                rows.push({ pos: 'Letter 2', char: letter2, val: val2, weight: 8, prod: val2 * 8 });
+                totalSum += (val1 * 9) + (val2 * 8);
+
+                const digitWeights = [7, 6, 5, 4, 3, 2];
+                for (let i = 0; i < 6; i++) {
+                    const dVal = parseInt(digits[i], 10);
+                    const w = digitWeights[i];
+                    const prod = dVal * w;
+                    totalSum += prod;
+                    rows.push({ pos: `Digit ${i + 1}`, char: digits[i], val: dVal, weight: w, prod });
+                }
+
+            } else {
+                // Single letter prefix: weights 8, 7, 6, 5, 4, 3, 2
+                const letter1 = matchSingle[1];
+                const digits = matchSingle[2];
+
+                const val1 = letter1.charCodeAt(0) - 64; // A=1, B=2...
+                rows.push({ pos: 'Letter 1', char: letter1, val: val1, weight: 8, prod: val1 * 8 });
+                totalSum += val1 * 8;
+
+                const digitWeights = [7, 6, 5, 4, 3, 2];
+                for (let i = 0; i < 6; i++) {
+                    const dVal = parseInt(digits[i], 10);
+                    const w = digitWeights[i];
+                    const prod = dVal * w;
+                    totalSum += prod;
+                    rows.push({ pos: `Digit ${i + 1}`, char: digits[i], val: dVal, weight: w, prod });
+                }
+            }
+
+            const remainder = totalSum % 11;
+            let checkDigit = '';
+            let formulaText = '';
+
+            if (remainder === 0) {
+                checkDigit = '0';
+                formulaText = 'Remainder = 0 → Check Digit = 0';
+            } else if (remainder === 1) {
+                checkDigit = 'A';
+                formulaText = 'Remainder = 1 → Check Digit = A (represents 10)';
+            } else {
+                const diff = 11 - remainder;
+                checkDigit = diff.toString();
+                formulaText = `11 - Remainder (${remainder}) = ${diff} → Check Digit = ${checkDigit}`;
+            }
+
+            return {
+                valid: true,
+                cleanPrefix: clean,
+                fullHKID: `${clean}(${checkDigit})`,
+                isDouble,
+                rows,
+                totalSum,
+                remainder,
+                checkDigit,
+                formulaText
+            };
         }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
+
+        function generateRandomHKIDPrefix() {
+            const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+            const isDouble = Math.random() > 1;
+            let prefix = '';
+
+            if (isDouble) {
+                prefix = letters[Math.floor(Math.random() * letters.length)] + 
+                         letters[Math.floor(Math.random() * letters.length)];
+            } else {
+                prefix = letters[Math.floor(Math.random() * letters.length)];
+            }
+
+            let digits = '';
+            for (let i = 0; i < 6; i++) {
+                digits += Math.floor(Math.random() * 10);
+            }
+
+            return prefix + digits;
         }
-        this.enabled = !this.enabled;
-        if (this.enabled) this.playTone(659.25, 'sine', 0.4);
-        return this.enabled;
-      }
-      playTone(freq = 520, type = 'sine', duration = 0.8) {
-        if (!this.enabled || !this.ctx) return;
-        try {
-          const now = this.ctx.currentTime;
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = type;
-          osc.frequency.setValueAtTime(freq, now);
-          osc.frequency.exponentialRampToValueAtTime(freq * 1.04, now + duration * 0.2);
-          gain.gain.setValueAtTime(0.001, now);
-          gain.gain.linearRampToValueAtTime(0.2, now + 0.04);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(now);
-          osc.stop(now + duration);
-        } catch (e) {}
-      }
-      playOrbHarmonic() {
-        if (!this.enabled || !this.ctx) return;
-        // Deep ethereal chord: A3, E4, A4, C#5, E5
-        const freqs = [220, 329.63, 440, 554.37, 659.25];
-        freqs.forEach((freq, idx) => {
-          setTimeout(() => this.playTone(freq, 'sine', 1.2), idx * 80);
+
+        // DOM elements
+        const tabCalc = document.getElementById('tab-calc');
+        const tabGame = document.getElementById('tab-game');
+        const sectionCalc = document.getElementById('section-calc');
+        const sectionGame = document.getElementById('section-game');
+
+        const hkidInput = document.getElementById('hkid-input');
+        const clearBtn = document.getElementById('clear-btn');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const randomBtn = document.getElementById('random-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const errorText = document.getElementById('error-text');
+
+        const mainLantern = document.getElementById('main-lantern');
+        const checkDigitDisplay = document.getElementById('check-digit-display');
+        const fullHkidBadge = document.getElementById('full-hkid-badge');
+
+        const toggleBreakdownBtn = document.getElementById('toggle-breakdown-btn');
+        const toggleBreakdownText = document.getElementById('toggle-breakdown-text');
+        const toggleBreakdownIcon = document.getElementById('toggle-breakdown-icon');
+        const breakdownWrapper = document.getElementById('breakdown-wrapper');
+
+        const breakdownTbody = document.getElementById('breakdown-tbody');
+        const mathSummary = document.getElementById('math-summary');
+        const sumVal = document.getElementById('sum-val');
+        const remVal = document.getElementById('rem-val');
+        const formulaVal = document.getElementById('formula-val');
+        const formulaBadge = document.getElementById('formula-badge');
+
+        // Game elements
+        const gameScoreEl = document.getElementById('game-score');
+        const gameStreakEl = document.getElementById('game-streak');
+        const gameHkidPrompt = document.getElementById('game-hkid-prompt');
+        const digitButtonsContainer = document.getElementById('digit-buttons-container');
+        const gameFeedback = document.getElementById('game-feedback');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+
+        let currentGameTarget = null;
+        let score = 0;
+        let streak = 0;
+
+        tabCalc.addEventListener('click', () => {
+            tabCalc.classList.add('active');
+            tabGame.classList.remove('active');
+            sectionCalc.classList.remove('hidden');
+            sectionGame.classList.add('hidden');
         });
-      }
-      playKeystrokeTone() {
-        if (!this.enabled || !this.ctx) return;
-        const note = 440 + (Math.random() * 240);
-        this.playTone(note, 'sine', 0.12);
-      }
-    }
 
-    const audio = new MinimalAudio();
-
-    // DOM Elements - Initialized prior to animation loop to prevent Temporal Dead Zone ReferenceError
-    const hkidInput = document.getElementById('hkid-input');
-    const divinateBtn = document.getElementById('divinate-btn');
-    const btnText = document.getElementById('btn-text');
-    const statusToast = document.getElementById('status-toast');
-    const scryingOrb = document.getElementById('scrying-orb');
-    const mandalaContainer = document.getElementById('mandala-container');
-    const orbDigit = document.getElementById('orb-digit');
-    const copySection = document.getElementById('copy-section');
-    const fullHkidText = document.getElementById('full-hkid-text');
-    const copyHkidBtn = document.getElementById('copy-hkid-btn');
-    const copiedPill = document.getElementById('copied-pill');
-    const soundToggleBtn = document.getElementById('sound-toggle-btn');
-    const soundLabel = document.getElementById('sound-label');
-    const socketRunes = document.querySelectorAll('.socket-rune');
-
-    let currentResult = null;
-    let isScrying = false;
-
-    /* Cosmic Background & Doctor Strange Eldritch Sparkler Physics */
-    const canvas = document.getElementById('cosmic-canvas');
-    const ctx = canvas.getContext('2d');
-    let width = 0, height = 0;
-    let stars = [];
-    let manaSparks = [];
-    let shockwaves = [];
-    let eldritchEmbers = [];
-
-    function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      stars = Array.from({ length: 80 }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        r: Math.random() * 1.8 + 0.4,
-        color: Math.random() > 0.6 ? '#e9d5ff' : (Math.random() > 0.5 ? '#c084fc' : '#d946ef'),
-        dx: (Math.random() - 0.5) * 0.2,
-        dy: (Math.random() - 0.5) * 0.2,
-        twinkle: Math.random() * Math.PI
-      }));
-    }
-
-    // Doctor Strange Eldritch Spark Streamer (Spitting glowing embers along mandala perimeters)
-    function emitEldritchEmbers(cx, cy, count = 15, radius = 110) {
-      for (let i = 0; i < count; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        // Tangential velocity gives the iconic spinning sparkler effect from Dr. Strange
-        const tangent = angle + Math.PI / 2;
-        const tangentSpeed = (Math.random() * 4 + 3) * (Math.random() > 0.5 ? 1 : -1);
-        const radialSpeed = Math.random() * 2.5 - 0.5;
-
-        const posX = cx + Math.cos(angle) * (radius + (Math.random() * 16 - 8));
-        const posY = cy + Math.sin(angle) * (radius + (Math.random() * 16 - 8));
-
-        eldritchEmbers.push({
-          x: posX,
-          y: posY,
-          vx: Math.cos(tangent) * tangentSpeed + Math.cos(angle) * radialSpeed,
-          vy: Math.sin(tangent) * tangentSpeed + Math.sin(angle) * radialSpeed + 0.5, // slight gravity
-          life: 1.0,
-          decay: Math.random() * 0.035 + 0.02,
-          length: Math.random() * 8 + 4,
-          size: Math.random() * 2 + 1.2,
-          color: Math.random() > 0.3 ? '#f472b6' : (Math.random() > 0.5 ? '#d946ef' : '#fef08a')
+        tabGame.addEventListener('click', () => {
+            tabGame.classList.add('active');
+            tabCalc.classList.remove('active');
+            sectionGame.classList.remove('hidden');
+            sectionCalc.classList.add('hidden');
+            if (!currentGameTarget) startNewGameRound();
         });
-      }
-    }
 
-    // Cursor ethereal stardust
-    window.addEventListener('pointermove', (e) => {
-      if (Math.random() > 0.35) return;
-      manaSparks.push({
-        x: e.clientX,
-        y: e.clientY,
-        vx: (Math.random() - 0.5) * 1.6,
-        vy: (Math.random() - 0.5) * 1.6 - 0.4,
-        alpha: 0.95,
-        size: Math.random() * 2.5 + 1.2,
-        color: Math.random() > 0.4 ? '#d946ef' : '#c084fc'
-      });
-    });
+        function renderCalculatorUI(res) {
+            if (!res.valid) {
+                errorText.textContent = res.error;
+                errorMsg.classList.remove('opacity-0');
+                mainLantern.classList.remove('lantern-lit');
+                checkDigitDisplay.textContent = '?';
+                fullHkidBadge.textContent = '--';
+                return;
+            }
 
-    function spawnOrbBurst(cx, cy) {
-      shockwaves.push({ x: cx, y: cy, radius: 15, maxRadius: 240, alpha: 1.0 });
-      // Sizzling fiery sparks burst
-      for (let i = 0; i < 65; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 6 + 2;
-        manaSparks.push({
-          x: cx,
-          y: cy,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          alpha: 1,
-          size: Math.random() * 3 + 1.5,
-          color: Math.random() > 0.5 ? '#f5d0fe' : (Math.random() > 0.3 ? '#ec4899' : '#fde047')
+            errorMsg.classList.add('opacity-0');
+            mainLantern.classList.add('lantern-lit');
+
+            checkDigitDisplay.textContent = res.checkDigit;
+            fullHkidBadge.textContent = res.fullHKID;
+            formulaBadge.textContent = res.isDouble 
+                ? 'Method 2: 2 Letters (Weights: 9,8,7,6,5,4,3,2)' 
+                : 'Method 2: 1 Letter (Weights: 8,7,6,5,4,3,2)';
+
+            // Populate Breakdown Table
+            breakdownTbody.innerHTML = '';
+            res.rows.forEach((r, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-800/40 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-2.5 px-2 text-left text-slate-400 font-sans">${idx + 1}. ${r.pos}</td>
+                    <td class="py-2.5 px-2 text-amber-300 font-bold">${r.char}</td>
+                    <td class="py-2.5 px-2 text-slate-300">${r.val}</td>
+                    <td class="py-2.5 px-2 text-slate-500">×</td>
+                    <td class="py-2.5 px-2 text-amber-400 font-bold">${r.weight}</td>
+                    <td class="py-2.5 px-2 text-right text-emerald-400 font-bold">${r.prod}</td>
+                `;
+                breakdownTbody.appendChild(tr);
+            });
+
+            // Summary Info
+            sumVal.textContent = res.totalSum;
+            remVal.textContent = res.remainder;
+            formulaVal.textContent = res.formulaText;
+        }
+
+        function initGameButtons() {
+            digitButtonsContainer.innerHTML = '';
+            const options = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A'];
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'py-3 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-200 font-bold text-lg mono-font hover:bg-amber-500 hover:text-slate-950 transition-all active:scale-95 shadow-md flex items-center justify-center';
+                btn.textContent = opt;
+                btn.addEventListener('click', () => handleGameAnswer(opt));
+                digitButtonsContainer.appendChild(btn);
+            });
+        }
+
+        function startNewGameRound() {
+            const prefix = generateRandomHKIDPrefix();
+            currentGameTarget = calculateHKIDMethod2(prefix);
+            gameHkidPrompt.textContent = `${prefix}( ? )`;
+            
+            gameFeedback.className = 'min-h-12 flex items-center justify-center font-bold text-sm transition-all opacity-0 rounded-xl px-4 py-2';
+            feedbackText.textContent = '--';
+
+            // Re-enable buttons
+            Array.from(digitButtonsContainer.children).forEach(btn => {
+                btn.disabled = false;
+                btn.className = 'py-3 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-200 font-bold text-lg mono-font hover:bg-amber-500 hover:text-slate-950 transition-all active:scale-95 shadow-md flex items-center justify-center';
+            });
+        }
+
+        function handleGameAnswer(selectedDigit) {
+            if (!currentGameTarget) return;
+
+            const isCorrect = selectedDigit === currentGameTarget.checkDigit;
+
+            // Lock options after selection
+            Array.from(digitButtonsContainer.children).forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                const earnedPoints = 100 + (streak * 25);
+                score += earnedPoints;
+                streak += 1;
+                gameScoreEl.textContent = score;
+                gameStreakEl.textContent = `${streak} 🔥`;
+
+                feedbackText.innerHTML = `🎉 <strong>Splendid!</strong> Correct check digit for ${currentGameTarget.cleanPrefix} is <strong>(${currentGameTarget.checkDigit})</strong>. (+${earnedPoints} pts)`;
+                gameFeedback.className = 'min-h-12 flex items-center justify-center font-medium text-xs sm:text-sm text-emerald-300 bg-emerald-950/70 border border-emerald-500/40 rounded-xl px-4 py-2 opacity-100';
+
+                // Confetti fireworks
+                jsConfetti.addConfetti({
+                    emojis: ['🥮', '🏮', '✨', '🌕', '🐇'],
+                    emojiSize: 32,
+                    confettiNumber: 30,
+                });
+
+            } else {
+                streak = 0;
+                gameStreakEl.textContent = `0 🔥`;
+
+                feedbackText.innerHTML = `❌ <strong>Not quite!</strong> ${currentGameTarget.cleanPrefix} check digit is <strong>(${currentGameTarget.checkDigit})</strong>. [Sum: ${currentGameTarget.totalSum}, Rem: ${currentGameTarget.remainder}]`;
+                gameFeedback.className = 'min-h-12 flex items-center justify-center font-medium text-xs sm:text-sm text-rose-300 bg-rose-950/70 border border-rose-500/40 rounded-xl px-4 py-2 opacity-100';
+            }
+        }
+
+        function initBackgroundDecorations() {
+            const starsContainer = document.getElementById('stars-layer');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star-dot';
+                const size = Math.random() * 2.5 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+                starsContainer.appendChild(star);
+            }
+
+            const skyContainer = document.getElementById('sky-lanterns-layer');
+            for (let i = 0; i < 7; i++) {
+                const lantern = document.createElement('div');
+                lantern.className = 'sky-lantern text-amber-400/35 text-2xl';
+                lantern.innerHTML = '<i class="fa-solid fa-lightbulb"></i>';
+                lantern.style.left = `${Math.random() * 90 + 5}%`;
+                lantern.style.setProperty('--duration', `${Math.random() * 7 + 12}s`);
+                lantern.style.setProperty('--delay', `${Math.random() * 8}s`);
+                skyContainer.appendChild(lantern);
+            }
+        }
+
+        function resetLanternDisplay(customBadge = '--') {
+            mainLantern.classList.remove('lantern-lit');
+            checkDigitDisplay.textContent = '?';
+            fullHkidBadge.textContent = customBadge;
+            errorMsg.classList.add('opacity-0');
+            breakdownTbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="py-6 text-slate-400 italic text-center font-sans">
+                        🏮 Press <strong>"Light Lantern"</strong> to compute and reveal the check digit!
+                    </td>
+                </tr>
+            `;
+            sumVal.textContent = '0';
+            remVal.textContent = '0';
+            formulaVal.textContent = '--';
+
+            breakdownWrapper.classList.add('hidden');
+            toggleBreakdownText.textContent = 'Reveal the Magic';
+            toggleBreakdownIcon.classList.remove('rotate-180');
+        }
+
+        hkidInput.addEventListener('input', (e) => {
+            const val = e.target.value.toUpperCase();
+            hkidInput.value = val;
+            clearBtn.classList.toggle('hidden', val.length === 0);
+            // Keep check digit hidden while typing until the button is clicked
+            resetLanternDisplay(val ? `${val}( ? )` : '--');
         });
-      }
-      emitEldritchEmbers(cx, cy, 40, 115);
-    }
 
-    function animateCosmos() {
-      ctx.clearRect(0, 0, width, height);
+        hkidInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                calculateBtn.click();
+            }
+        });
 
-      // Continuous ambient Dr Strange eldritch sparks around the orb
-      if (scryingOrb) {
-        const orbRect = scryingOrb.getBoundingClientRect();
-        const cx = orbRect.left + orbRect.width / 2;
-        const cy = orbRect.top + orbRect.height / 2;
-        if (Math.random() > 0.4) {
-          emitEldritchEmbers(cx, cy, isScrying ? 8 : 2, orbRect.width / 2 + 10);
-        }
-      }
+        clearBtn.addEventListener('click', () => {
+            hkidInput.value = '';
+            clearBtn.classList.add('hidden');
+            resetLanternDisplay('--');
+        });
 
-      // Render Stars
-      stars.forEach(s => {
-        s.x = (s.x + s.dx + width) % width;
-        s.y = (s.y + s.dy + height) % height;
-        s.twinkle += 0.02;
-        const alpha = 0.25 + 0.5 * Math.sin(s.twinkle);
+        calculateBtn.addEventListener('click', () => {
+            const rawVal = hkidInput.value.trim();
+            if (!rawVal) {
+                errorText.textContent = 'Please enter an HKID first (e.g. B255241).';
+                errorMsg.classList.remove('opacity-0');
+                return;
+            }
+            const res = calculateHKIDMethod2(rawVal);
+            renderCalculatorUI(res);
+        });
 
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = s.color;
-        ctx.globalAlpha = Math.max(0.1, alpha);
-        ctx.fill();
-      });
+        randomBtn.addEventListener('click', () => {
+            const rand = generateRandomHKIDPrefix();
+            hkidInput.value = rand;
+            clearBtn.classList.remove('hidden');
+            // Populate prefix but do not reveal check digit until Light Lantern is pressed
+            resetLanternDisplay(`${rand}( ? )`);
+        });
 
-      // Render Shockwaves
-      for (let i = shockwaves.length - 1; i >= 0; i--) {
-        const sw = shockwaves[i];
-        sw.radius += 5;
-        sw.alpha *= 0.93;
-        ctx.beginPath();
-        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(236, 72, 153, ${sw.alpha})`;
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
+        toggleBreakdownBtn.addEventListener('click', () => {
+            const isCurrentlyHidden = breakdownWrapper.classList.contains('hidden');
 
-        ctx.beginPath();
-        ctx.arc(sw.x, sw.y, sw.radius * 0.82, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(168, 85, 247, ${sw.alpha * 0.7})`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
+            if (isCurrentlyHidden) {
+                // If lantern is not lit yet, calculate it first
+                if (checkDigitDisplay.textContent === '?') {
+                    calculateBtn.click();
+                }
+                breakdownWrapper.classList.remove('hidden');
+                toggleBreakdownText.textContent = 'Hide the Magic';
+                toggleBreakdownIcon.classList.add('rotate-180');
+            } else {
+                breakdownWrapper.classList.add('hidden');
+                toggleBreakdownText.textContent = 'Reveal the Magic';
+                toggleBreakdownIcon.classList.remove('rotate-180');
+            }
+        });
 
-        if (sw.alpha < 0.02 || sw.radius >= sw.maxRadius) {
-          shockwaves.splice(i, 1);
-        }
-      }
+        nextQuestionBtn.addEventListener('click', startNewGameRound);
 
-      // Render Doctor Strange Eldritch Embers (Sparks with streaks)
-      for (let i = eldritchEmbers.length - 1; i >= 0; i--) {
-        const e = eldritchEmbers[i];
-        e.x += e.vx;
-        e.y += e.vy;
-        e.vy += 0.08; // spark gravity
-        e.vx *= 0.96; // drag
-        e.life -= e.decay;
+        // Window load initialization
+        window.onload = function() {
+            initBackgroundDecorations();
+            initGameButtons();
 
-        if (e.life <= 0) {
-          eldritchEmbers.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        // Streak tail
-        ctx.moveTo(e.x, e.y);
-        ctx.lineTo(e.x - e.vx * 1.5, e.y - e.vy * 1.5);
-        ctx.strokeStyle = e.color;
-        ctx.lineWidth = e.size;
-        ctx.globalAlpha = e.life;
-        ctx.lineCap = 'round';
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = e.color;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      // Render Mana Sparks
-      for (let i = manaSparks.length - 1; i >= 0; i--) {
-        const p = manaSparks[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.022;
-
-        if (p.alpha <= 0) {
-          manaSparks.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = p.color;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-
-      requestAnimationFrame(animateCosmos);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    animateCosmos();
-    /* HKID Check Digit Calculation (Hong Kong ImmD Mod 11 Standard) */
-    function calculateHKIDCheckDigit(input) {
-      if (!input) return null;
-      const clean = input.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
-
-      const isSingle = /^[A-Z]{1}[0-9]{6}$/.test(clean);
-      const isDouble = /^[A-Z]{2}[0-9]{6}$/.test(clean);
-
-      if (!isSingle && !isDouble) return null;
-
-      let sum = 0;
-      if (isSingle) {
-        // Single letter prefix: leading space value 36 at weight 9 (36 * 9 = 324)
-        sum += 36 * 9;
-        // Base-36 letter: A=10, B=11 ... Z=35 (charCode - 55)
-        sum += (clean.charCodeAt(0) - 55) * 8;
-        for (let i = 0; i < 6; i++) {
-          sum += parseInt(clean[i + 1], 10) * (7 - i);
-        }
-      } else {
-        // Two letter prefix: 1st letter at weight 9, 2nd letter at weight 8
-        sum += (clean.charCodeAt(0) - 55) * 9;
-        sum += (clean.charCodeAt(1) - 55) * 8;
-        for (let i = 0; i < 6; i++) {
-          sum += parseInt(clean[i + 2], 10) * (7 - i);
-        }
-      }
-
-      const remainder = sum % 11;
-      let checkDigit;
-      if (remainder === 0) {
-        checkDigit = '0';
-      } else if (remainder === 1) {
-        checkDigit = 'A';
-      } else {
-        checkDigit = (11 - remainder).toString();
-      }
-
-      return {
-        prefix: clean,
-        checkDigit,
-        full: `${clean}(${checkDigit})`
-      };
-    }
-
-    // Toggle Audio
-    soundToggleBtn.addEventListener('click', () => {
-      const on = audio.toggle();
-      soundLabel.textContent = on ? 'Sound: On' : 'Sound: Off';
-      soundToggleBtn.classList.toggle('border-fuchsia-400', on);
-    });
-
-    // Keystroke listeners & socket lights
-    hkidInput.addEventListener('input', (e) => {
-      let val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-      e.target.value = val;
-      statusToast.classList.add('hidden');
-      audio.playKeystrokeTone();
-
-      // Trigger sizzling eldritch sparks on key input
-      if (scryingOrb) {
-        const r = scryingOrb.getBoundingClientRect();
-        emitEldritchEmbers(r.left + r.width / 2, r.top + r.height / 2, 6, r.width / 2 + 5);
-      }
-
-      // Show 8th socket when 2-letter prefix is entered
-      if (val.length > 7) {
-        socketRunes[7].classList.remove('hidden');
-      } else {
-        socketRunes[7].classList.add('hidden');
-      }
-
-      // Purple Glow Sockets
-      socketRunes.forEach((socket, i) => {
-        if (i < val.length) {
-          socket.classList.remove('bg-purple-950', 'border-purple-800');
-          socket.classList.add('bg-fuchsia-400', 'border-purple-300', 'shadow-[0_0_10px_#d946ef]');
-        } else {
-          socket.classList.add('bg-purple-950', 'border-purple-800');
-          socket.classList.remove('bg-fuchsia-400', 'border-purple-300', 'shadow-[0_0_10px_#d946ef]');
-        }
-      });
-    });
-
-    hkidInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') revealAnswer();
-    });
-
-    divinateBtn.addEventListener('click', revealAnswer);
-    scryingOrb.addEventListener('click', () => {
-      if (!isScrying) revealAnswer();
-    });
-
-    function revealAnswer() {
-      if (isScrying) return;
-      const val = hkidInput.value.trim().toUpperCase();
-      const res = calculateHKIDCheckDigit(val);
-
-      if (!res) {
-        statusToast.textContent = 'Inscribe 1 or 2 prefix letters followed by 6 numerals (e.g. E364912 or AB987654).';
-        statusToast.classList.remove('hidden');
-        audio.playTone(180, 'sawtooth', 0.3);
-        return;
-      }
-
-      statusToast.classList.add('hidden');
-      currentResult = res;
-      isScrying = true;
-
-      // Doctor Strange Mandalas accelerate into hyper-rotation
-      btnText.textContent = 'CONJURING MANDALA... 🔮';
-      scryingOrb.classList.add('shadow-orb-active', 'scale-105');
-      mandalaContainer.classList.add('casting-surge');
-
-      const orbRect = scryingOrb.getBoundingClientRect();
-      const cx = orbRect.left + orbRect.width / 2;
-      const cy = orbRect.top + orbRect.height / 2;
-      spawnOrbBurst(cx, cy);
-
-      // Rapid Runic Glyphs Scrying Sequence with sparkler sizzling
-      const glyphs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A'];
-      let cycles = 0;
-      const maxCycles = 16;
-      
-      const interval = setInterval(() => {
-        orbDigit.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
-        emitEldritchEmbers(cx, cy, 5, orbRect.width / 2 + 10);
-        audio.playTone(320 + Math.random() * 320, 'sine', 0.08);
-        cycles++;
-
-        if (cycles >= maxCycles) {
-          clearInterval(interval);
-          // Pure answer display: only the check digit
-          orbDigit.textContent = res.checkDigit;
-          fullHkidText.textContent = res.full;
-          btnText.textContent = 'DIVINE CHECK DIGIT 🔮';
-          scryingOrb.classList.remove('scale-105');
-          mandalaContainer.classList.remove('casting-surge');
-
-          // Reveal Full Formatted Copy Section
-          copySection.classList.remove('hidden');
-
-          // Celestial Harmonic Finale & Eldritch Shield Burst
-          audio.playOrbHarmonic();
-          spawnOrbBurst(cx, cy);
-          isScrying = false;
-        }
-      }, 55);
-    }
-
-    // Direct Copy to Clipboard
-    copyHkidBtn.addEventListener('click', () => {
-      if (!currentResult) return;
-      const temp = document.createElement('input');
-      temp.value = currentResult.full;
-      document.body.appendChild(temp);
-      temp.select();
-      try {
-        document.execCommand('copy');
-        copiedPill.classList.remove('opacity-0');
-        audio.playTone(880, 'sine', 0.2);
-        setTimeout(() => copiedPill.classList.add('opacity-0'), 2200);
-      } catch (err) {}
-      document.body.removeChild(temp);
-    });
-  </script>
+            // Initial example loaded in standby mode without revealing check digit
+            hkidInput.value = 'B255241';
+            clearBtn.classList.remove('hidden');
+            resetLanternDisplay('B255241( ? )');
+        };
+    </script>
 </body>
 </html>
